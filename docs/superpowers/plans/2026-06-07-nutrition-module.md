@@ -50,7 +50,7 @@
 - Create: `src/HealthMcp.Modules.Nutrition/Entities/Meal.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/Entities/ConsumedProduct.cs`
 
-- [ ] **Step 1: Create Product.cs**
+- [x] **Step 1: Create Product.cs**
 
 ```csharp
 namespace HealthMcp.Modules.Nutrition.Entities;
@@ -102,7 +102,7 @@ public class Product
 }
 ```
 
-- [ ] **Step 2: Create MealType.cs**
+- [x] **Step 2: Create MealType.cs**
 
 ```csharp
 namespace HealthMcp.Modules.Nutrition.Entities;
@@ -114,7 +114,7 @@ public class MealType
 }
 ```
 
-- [ ] **Step 3: Create Meal.cs**
+- [x] **Step 3: Create Meal.cs**
 
 ```csharp
 namespace HealthMcp.Modules.Nutrition.Entities;
@@ -129,7 +129,7 @@ public class Meal
 }
 ```
 
-- [ ] **Step 4: Create ConsumedProduct.cs**
+- [x] **Step 4: Create ConsumedProduct.cs**
 
 ```csharp
 namespace HealthMcp.Modules.Nutrition.Entities;
@@ -145,14 +145,14 @@ public class ConsumedProduct
 }
 ```
 
-- [ ] **Step 5: Build and verify**
+- [x] **Step 5: Build and verify**
 
 ```bash
 dotnet build src/HealthMcp.Modules.Nutrition/
 # Expected: Build succeeded
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add -A
@@ -170,7 +170,7 @@ git commit -m "feat: add domain entities for Nutrition module"
 - Create: `src/HealthMcp.Modules.Nutrition/Infrastructure/Configurations/ConsumedProductConfiguration.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/Infrastructure/NutritionDbContext.cs`
 
-- [ ] **Step 1: Create ProductConfiguration.cs**
+- [x] **Step 1: Create ProductConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -196,7 +196,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 }
 ```
 
-- [ ] **Step 2: Create MealTypeConfiguration.cs**
+- [x] **Step 2: Create MealTypeConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -217,7 +217,7 @@ public class MealTypeConfiguration : IEntityTypeConfiguration<MealType>
 }
 ```
 
-- [ ] **Step 3: Create MealConfiguration.cs**
+- [x] **Step 3: Create MealConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -244,7 +244,7 @@ public class MealConfiguration : IEntityTypeConfiguration<Meal>
 }
 ```
 
-- [ ] **Step 4: Create ConsumedProductConfiguration.cs**
+- [x] **Step 4: Create ConsumedProductConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -276,7 +276,7 @@ public class ConsumedProductConfiguration : IEntityTypeConfiguration<ConsumedPro
 }
 ```
 
-- [ ] **Step 5: Create NutritionDbContext.cs**
+- [x] **Step 5: Create NutritionDbContext.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -304,14 +304,14 @@ public class NutritionDbContext : DbContext
 }
 ```
 
-- [ ] **Step 6: Build and verify**
+- [x] **Step 6: Build and verify**
 
 ```bash
 dotnet build src/HealthMcp.Modules.Nutrition/
 # Expected: Build succeeded
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -320,19 +320,19 @@ git commit -m "feat: add EF Core configurations and NutritionDbContext"
 
 ---
 
-### Task 5: Create and Apply Initial Migration
+### Task 5: Create and Apply Initial Migration — **DONE**
 
 **Files:**
 - Modify: `src/HealthMcp.Api/appsettings.json` (connection string)
 
-- [ ] **Step 1: Add EF tooling and connection string**
+- [x] **Step 1: Add EF tooling and connection string**
 
 ```bash
 dotnet new tool-manifest
 dotnet tool install dotnet-ef
 ```
 
-- [ ] **Step 2: Set connection string in API project**
+- [x] **Step 2: Set connection string in API project**
 
 Create `src/HealthMcp.Api/appsettings.json`:
 
@@ -350,7 +350,7 @@ Create `src/HealthMcp.Api/appsettings.json`:
 }
 ```
 
-- [ ] **Step 3: Add DbContext registration to API Program.cs**
+- [x] **Step 3: Add DbContext registration to API Program.cs**
 
 Write `src/HealthMcp.Api/Program.cs`:
 
@@ -368,28 +368,28 @@ var app = builder.Build();
 app.Run();
 ```
 
-- [ ] **Step 4: Create initial migration**
+- [x] **Step 4: Create initial migration**
 
 ```bash
 dotnet ef migrations add InitialCreate --project src/HealthMcp.Modules.Nutrition --startup-project src/HealthMcp.Api
 # Expected: Build succeeded, migration created in src/HealthMcp.Modules.Nutrition/Migrations/
 ```
 
-- [ ] **Step 5: Apply migration to database**
+- [x] **Step 5: Apply migration to database**
 
 ```bash
 dotnet ef database update --project src/HealthMcp.Modules.Nutrition --startup-project src/HealthMcp.Api
 # Expected: Applying migration 'InitialCreate'. Done.
 ```
 
-- [ ] **Step 6: Verify tables exist**
+- [x] **Step 6: Verify tables exist**
 
 ```bash
 docker compose exec postgres psql -U postgres -d health_mcp -c "\dt"
 # Expected: Tables listed: Products, MealTypes, Meals, ConsumedProducts
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
