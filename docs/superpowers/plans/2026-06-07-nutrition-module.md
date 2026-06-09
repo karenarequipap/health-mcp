@@ -970,7 +970,7 @@ git commit -m "feat: add CSV import API endpoint on port 9092"
 - Create: `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetProductDetailsByNameToolTests.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/McpTools/GetProductDetailsByNameTool.cs`
 
-- [ ] **Step 1: Write failing test for get_products**
+- [x] **Step 1: Write failing test for get_products**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetProductsToolTests.cs`:
 
@@ -1011,14 +1011,14 @@ public class GetProductsToolTests
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetProductsToolTests"
 # Expected: Fails
 ```
 
-- [ ] **Step 3: Implement get_products tool**
+- [x] **Step 3: Implement get_products tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetProductsTool.cs`:
 
@@ -1051,14 +1051,14 @@ public record ProductSummary(string name, decimal energy, decimal protein, decim
 public record GetProductsResult(List<ProductSummary> products);
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetProductsToolTests"
 # Expected: Passed
 ```
 
-- [ ] **Step 5: Write failing test for get_product_details_by_name**
+- [x] **Step 5: Write failing test for get_product_details_by_name**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetProductDetailsByNameToolTests.cs`:
 
@@ -1115,14 +1115,14 @@ public class GetProductDetailsByNameToolTests
 }
 ```
 
-- [ ] **Step 6: Run test to verify it fails**
+- [x] **Step 6: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetProductDetailsByNameToolTests"
 # Expected: Fails
 ```
 
-- [ ] **Step 7: Implement the tool**
+- [x] **Step 7: Implement the tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetProductDetailsByNameTool.cs`:
 
@@ -1154,14 +1154,14 @@ public static class GetProductDetailsByNameTool
 public record GetProductDetailsResult(Product? product);
 ```
 
-- [ ] **Step 8: Run tests to verify they pass**
+- [x] **Step 8: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetProductDetailsByNameToolTests"
 # Expected: Passed
 ```
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add -A
