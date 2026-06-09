@@ -823,7 +823,7 @@ git commit -m "feat: implement CSV import service with duplicate detection"
 - Create: `src/HealthMcp.Api/Endpoints/CsvImportEndpoints.cs`
 - Modify: `src/HealthMcp.Api/Program.cs`
 
-- [ ] **Step 1: Write the failing integration test**
+- [x] **Step 1: Write the failing integration test**
 
 Write `tests/HealthMcp.Api.Tests/CsvImportEndpointTests.cs`:
 
@@ -853,14 +853,14 @@ public class CsvImportEndpointTests
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Api.Tests/
 # Expected: Fails (endpoint not implemented)
 ```
 
-- [ ] **Step 3: Implement the endpoint**
+- [x] **Step 3: Implement the endpoint**
 
 Write `src/HealthMcp.Api/Endpoints/CsvImportEndpoints.cs`:
 
@@ -885,7 +885,7 @@ public static class CsvImportEndpoints
 }
 ```
 
-- [ ] **Step 4: Update Program.cs**
+- [x] **Step 4: Update Program.cs**
 
 Write `src/HealthMcp.Api/Program.cs`:
 
@@ -915,7 +915,7 @@ Note: The `Program` class needs to be accessible from the test project. Add at t
 public partial class Program { }
 ```
 
-- [ ] **Step 5: Configure API port**
+- [x] **Step 5: Configure API port**
 
 Update `src/HealthMcp.Api/Properties/launchSettings.json` or add to `appsettings.json`:
 
@@ -931,14 +931,14 @@ Update `src/HealthMcp.Api/Properties/launchSettings.json` or add to `appsettings
 }
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Api.Tests/
 # Expected: Passed
 ```
 
-- [ ] **Step 7: Manual smoke test**
+- [x] **Step 7: Manual smoke test**
 
 ```bash
 # Start API in background
@@ -953,7 +953,7 @@ curl -X POST -H "Content-Type: text/csv" --data-binary "Date,Meal,\"Products and
 kill %1
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add -A
