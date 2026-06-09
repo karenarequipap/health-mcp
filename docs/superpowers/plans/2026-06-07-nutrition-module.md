@@ -405,7 +405,7 @@ git commit -m "feat: create and apply initial EF migration"
 - Create: `src/HealthMcp.Modules.Nutrition/Services/CsvImportService.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/Services/ImportResult.cs`
 
-- [ ] **Step 1: Create the ImportResult DTO**
+- [x] **Step 1: Create the ImportResult DTO**
 
 Write `src/HealthMcp.Modules.Nutrition/Services/ImportResult.cs`:
 
@@ -423,7 +423,7 @@ public class ImportResult
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/Services/CsvImportServiceTests.cs`:
 
@@ -538,14 +538,14 @@ public class CsvImportServiceTests
 }
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~CsvImportServiceTests"
 # Expected: Build succeeded, 0 passed, 4 failed (CsvImportService not found)
 ```
 
-- [ ] **Step 4: Write minimal implementation**
+- [x] **Step 4: Write minimal implementation**
 
 Write `src/HealthMcp.Modules.Nutrition/Services/CsvImportService.cs`:
 
@@ -775,7 +775,7 @@ public class CsvImportService(NutritionDbContext db)
 }
 ```
 
-- [ ] **Step 5: Fix the test assertion — CSV values are per consumed quantity, need scaling to per 100g**
+- [x] **Step 5: Fix the test assertion — CSV values are per consumed quantity, need scaling to per 100g**
 
 Update the first test's assertion in `CsvImportServiceTests.cs`:
 
@@ -799,16 +799,16 @@ New:
         Assert.Equal(276.00m, product.Calories);
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~CsvImportServiceTests"
-# Expected: Passed 4, Failed 0
+# Expected: Passed 5, Failed 0
 ```
 
 If tests fail, debug the service implementation and re-run until they pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
