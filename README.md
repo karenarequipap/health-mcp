@@ -326,7 +326,7 @@ health-mcp/
 ├── docker-compose.yml                       # PostgreSQL container
 ├── AGENTS.md                                # Agentic worker guide
 ├── README.md                                # This file
-└── HealthMcp.sln                            # Solution file
+└── HealthMcp.slnx                           # Solution file (.slnx format)
 ```
 
 ## Data Flow
