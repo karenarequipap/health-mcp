@@ -405,7 +405,7 @@ git commit -m "feat: create and apply initial EF migration"
 - Create: `src/HealthMcp.Modules.Nutrition/Services/CsvImportService.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/Services/ImportResult.cs`
 
-- [ ] **Step 1: Create the ImportResult DTO**
+- [x] **Step 1: Create the ImportResult DTO**
 
 Write `src/HealthMcp.Modules.Nutrition/Services/ImportResult.cs`:
 
@@ -423,7 +423,7 @@ public class ImportResult
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/Services/CsvImportServiceTests.cs`:
 
@@ -538,14 +538,14 @@ public class CsvImportServiceTests
 }
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~CsvImportServiceTests"
 # Expected: Build succeeded, 0 passed, 4 failed (CsvImportService not found)
 ```
 
-- [ ] **Step 4: Write minimal implementation**
+- [x] **Step 4: Write minimal implementation**
 
 Write `src/HealthMcp.Modules.Nutrition/Services/CsvImportService.cs`:
 
@@ -775,7 +775,7 @@ public class CsvImportService(NutritionDbContext db)
 }
 ```
 
-- [ ] **Step 5: Fix the test assertion — CSV values are per consumed quantity, need scaling to per 100g**
+- [x] **Step 5: Fix the test assertion — CSV values are per consumed quantity, need scaling to per 100g**
 
 Update the first test's assertion in `CsvImportServiceTests.cs`:
 
@@ -799,16 +799,16 @@ New:
         Assert.Equal(276.00m, product.Calories);
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~CsvImportServiceTests"
-# Expected: Passed 4, Failed 0
+# Expected: Passed 5, Failed 0
 ```
 
 If tests fail, debug the service implementation and re-run until they pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -823,7 +823,7 @@ git commit -m "feat: implement CSV import service with duplicate detection"
 - Create: `src/HealthMcp.Api/Endpoints/CsvImportEndpoints.cs`
 - Modify: `src/HealthMcp.Api/Program.cs`
 
-- [ ] **Step 1: Write the failing integration test**
+- [x] **Step 1: Write the failing integration test**
 
 Write `tests/HealthMcp.Api.Tests/CsvImportEndpointTests.cs`:
 
@@ -853,14 +853,14 @@ public class CsvImportEndpointTests
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Api.Tests/
 # Expected: Fails (endpoint not implemented)
 ```
 
-- [ ] **Step 3: Implement the endpoint**
+- [x] **Step 3: Implement the endpoint**
 
 Write `src/HealthMcp.Api/Endpoints/CsvImportEndpoints.cs`:
 
@@ -885,7 +885,7 @@ public static class CsvImportEndpoints
 }
 ```
 
-- [ ] **Step 4: Update Program.cs**
+- [x] **Step 4: Update Program.cs**
 
 Write `src/HealthMcp.Api/Program.cs`:
 
@@ -915,7 +915,7 @@ Note: The `Program` class needs to be accessible from the test project. Add at t
 public partial class Program { }
 ```
 
-- [ ] **Step 5: Configure API port**
+- [x] **Step 5: Configure API port**
 
 Update `src/HealthMcp.Api/Properties/launchSettings.json` or add to `appsettings.json`:
 
@@ -931,14 +931,14 @@ Update `src/HealthMcp.Api/Properties/launchSettings.json` or add to `appsettings
 }
 ```
 
-- [ ] **Step 6: Run tests to verify they pass**
+- [x] **Step 6: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Api.Tests/
 # Expected: Passed
 ```
 
-- [ ] **Step 7: Manual smoke test**
+- [x] **Step 7: Manual smoke test**
 
 ```bash
 # Start API in background
@@ -953,7 +953,7 @@ curl -X POST -H "Content-Type: text/csv" --data-binary "Date,Meal,\"Products and
 kill %1
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add -A
