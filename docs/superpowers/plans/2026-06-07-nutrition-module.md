@@ -1178,7 +1178,7 @@ git commit -m "feat: add get_products and get_product_details_by_name MCP tools"
 - Create: `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetNutrientConsumptionByDateRangeToolTests.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/McpTools/GetNutrientConsumptionByDateRangeTool.cs`
 
-- [ ] **Step 1: Write failing test for get_daily_consumption**
+- [x] **Step 1: Write failing test for get_daily_consumption**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetDailyConsumptionByDateRangeToolTests.cs`:
 
@@ -1235,13 +1235,13 @@ public class GetDailyConsumptionByDateRangeToolTests
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetDailyConsumptionByDateRangeToolTests"
 ```
 
-- [ ] **Step 3: Implement the tool**
+- [x] **Step 3: Implement the tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetDailyConsumptionByDateRangeTool.cs`:
 
@@ -1303,13 +1303,13 @@ public record DaySummary(string date, decimal calories, decimal protein, decimal
 public record DailyConsumptionResult(List<DaySummary> days);
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetDailyConsumptionByDateRangeToolTests"
 ```
 
-- [ ] **Step 5: Write failing test for get_nutrient_consumption**
+- [x] **Step 5: Write failing test for get_nutrient_consumption**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetNutrientConsumptionByDateRangeToolTests.cs`:
 
@@ -1392,13 +1392,13 @@ public class GetNutrientConsumptionByDateRangeToolTests
 }
 ```
 
-- [ ] **Step 6: Run test to verify it fails**
+- [x] **Step 6: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetNutrientConsumptionByDateRangeToolTests"
 ```
 
-- [ ] **Step 7: Implement the tool**
+- [x] **Step 7: Implement the tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetNutrientConsumptionByDateRangeTool.cs`:
 
@@ -1547,14 +1547,14 @@ public static class GetNutrientConsumptionByDateRangeTool
 }
 ```
 
-- [ ] **Step 8: Run tests to verify they pass**
+- [x] **Step 8: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetNutrientConsumptionByDateRangeToolTests"
 # Expected: Passed
 ```
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add -A
