@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HealthMcp.Api/HealthMcp.Api.csproj" />
+    <Project Path="src/HealthMcp.McpServer/HealthMcp.McpServer.csproj" />
+    <Project Path="src/HealthMcp.Modules.Nutrition/HealthMcp.Modules.Nutrition.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HealthMcp.Api.Tests/HealthMcp.Api.Tests.csproj" />
+    <Project Path="tests/HealthMcp.Modules.Nutrition.Tests/HealthMcp.Modules.Nutrition.Tests.csproj" />
+  </Folder>
+</Solution>

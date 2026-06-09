@@ -151,7 +151,7 @@ flowchart TB
 1. Clone the repository:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/karenarequipap/health-mcp.git
 cd health-mcp
 ```
 
@@ -326,7 +326,7 @@ health-mcp/
 ├── docker-compose.yml                       # PostgreSQL container
 ├── AGENTS.md                                # Agentic worker guide
 ├── README.md                                # This file
-└── HealthMcp.sln                            # Solution file
+└── HealthMcp.slnx                           # Solution file (.slnx format)
 ```
 
 ## Data Flow

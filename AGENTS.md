@@ -28,7 +28,7 @@ Compact reference for AI agents working in this repo.
 
 ## State of the Codebase
 
-- **Current state**: No code implemented yet — tasks are organized in 12 sequential tasks: prerequisites (Task 1), solution scaffolding (2), domain entities (3), EF configurations + DbContext (4), initial migration (5), CSV import service TDD (6), CSV import API endpoint (7), MCP tools `get_products` and `get_product_details_by_name` TDD (8), MCP tools `get_daily_consumption` and `get_nutrient_consumption` TDD (9), MCP tools `get_frequency` and `get_meal_detail` TDD (10), MCP Server host (11), integration tests (12).
+- **Current state**: Solution scaffolding is complete (projects, references, packages, Docker, solution file). No implementation code written yet — remaining work includes domain entities (Task 3), EF configurations + DbContext (4), initial migration (5), CSV import service TDD (6), CSV import API endpoint (7), MCP tools TDD (8-10), MCP Server host (11), and integration tests (12). Full plan at `docs/superpowers/plans/2026-06-07-nutrition-module.md`.
 - Domain model: `Product` (nutritional info per 100g), `MealType` (Breakfast/Lunch/etc.), `Meal` (date + meal type), `ConsumedProduct` (product + quantity in grams).
 - All MCP tools use EF Core `NutritionDbContext` with PostgreSQL and are registered via `[McpServerToolType]` + `[McpServerTool]`.
 
@@ -65,9 +65,14 @@ dotnet test
 - **Test Approach**: TDD — tests precede implementation (xUnit + Moq + EF Core InMemory).
 - **DB Schema**: Tables `Products`, `MealTypes`, `Meals`, `ConsumedProducts` — see `README.md` for ER diagram. Products have a unique index on `(Name, Calories)`. ConsumedProducts have a unique index on `(MealId, ProductId, QuantityGrams)` for duplicate row detection.
 
+## Progress Tracking
+
+Progress against the implementation plan is tracked in `docs/superpowers/plans/2026-06-07-nutrition-module.md` using Markdown checkboxes (`- [ ]` / `- [x]`).
+
+**Rule:** After completing any task from the plan, update the plan file by changing `- [ ]` to `- [x]` for all steps in that task. This keeps progress visible and verifiable.
+
 ## Notes for Agents
 
 - When implementing, match the entity schema and tool signatures described in `README.md`.
 - Use `dotnet build` to verify compilation after each commit-able milestone.
-- Ensure all pre-commit hooks pass before committing (uv run pre-commit run --all-files).
 - Commit after each task with descriptive commit messages.
