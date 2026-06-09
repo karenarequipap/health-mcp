@@ -170,7 +170,7 @@ git commit -m "feat: add domain entities for Nutrition module"
 - Create: `src/HealthMcp.Modules.Nutrition/Infrastructure/Configurations/ConsumedProductConfiguration.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/Infrastructure/NutritionDbContext.cs`
 
-- [ ] **Step 1: Create ProductConfiguration.cs**
+- [x] **Step 1: Create ProductConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -196,7 +196,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 }
 ```
 
-- [ ] **Step 2: Create MealTypeConfiguration.cs**
+- [x] **Step 2: Create MealTypeConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -217,7 +217,7 @@ public class MealTypeConfiguration : IEntityTypeConfiguration<MealType>
 }
 ```
 
-- [ ] **Step 3: Create MealConfiguration.cs**
+- [x] **Step 3: Create MealConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -244,7 +244,7 @@ public class MealConfiguration : IEntityTypeConfiguration<Meal>
 }
 ```
 
-- [ ] **Step 4: Create ConsumedProductConfiguration.cs**
+- [x] **Step 4: Create ConsumedProductConfiguration.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -276,7 +276,7 @@ public class ConsumedProductConfiguration : IEntityTypeConfiguration<ConsumedPro
 }
 ```
 
-- [ ] **Step 5: Create NutritionDbContext.cs**
+- [x] **Step 5: Create NutritionDbContext.cs**
 
 ```csharp
 using HealthMcp.Modules.Nutrition.Entities;
@@ -304,14 +304,14 @@ public class NutritionDbContext : DbContext
 }
 ```
 
-- [ ] **Step 6: Build and verify**
+- [x] **Step 6: Build and verify**
 
 ```bash
 dotnet build src/HealthMcp.Modules.Nutrition/
 # Expected: Build succeeded
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
