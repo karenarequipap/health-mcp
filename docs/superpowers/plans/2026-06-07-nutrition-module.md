@@ -320,19 +320,19 @@ git commit -m "feat: add EF Core configurations and NutritionDbContext"
 
 ---
 
-### Task 5: Create and Apply Initial Migration
+### Task 5: Create and Apply Initial Migration — **DONE**
 
 **Files:**
 - Modify: `src/HealthMcp.Api/appsettings.json` (connection string)
 
-- [ ] **Step 1: Add EF tooling and connection string**
+- [x] **Step 1: Add EF tooling and connection string**
 
 ```bash
 dotnet new tool-manifest
 dotnet tool install dotnet-ef
 ```
 
-- [ ] **Step 2: Set connection string in API project**
+- [x] **Step 2: Set connection string in API project**
 
 Create `src/HealthMcp.Api/appsettings.json`:
 
@@ -350,7 +350,7 @@ Create `src/HealthMcp.Api/appsettings.json`:
 }
 ```
 
-- [ ] **Step 3: Add DbContext registration to API Program.cs**
+- [x] **Step 3: Add DbContext registration to API Program.cs**
 
 Write `src/HealthMcp.Api/Program.cs`:
 
@@ -368,28 +368,28 @@ var app = builder.Build();
 app.Run();
 ```
 
-- [ ] **Step 4: Create initial migration**
+- [x] **Step 4: Create initial migration**
 
 ```bash
 dotnet ef migrations add InitialCreate --project src/HealthMcp.Modules.Nutrition --startup-project src/HealthMcp.Api
 # Expected: Build succeeded, migration created in src/HealthMcp.Modules.Nutrition/Migrations/
 ```
 
-- [ ] **Step 5: Apply migration to database**
+- [x] **Step 5: Apply migration to database**
 
 ```bash
 dotnet ef database update --project src/HealthMcp.Modules.Nutrition --startup-project src/HealthMcp.Api
 # Expected: Applying migration 'InitialCreate'. Done.
 ```
 
-- [ ] **Step 6: Verify tables exist**
+- [x] **Step 6: Verify tables exist**
 
 ```bash
 docker compose exec postgres psql -U postgres -d health_mcp -c "\dt"
 # Expected: Tables listed: Products, MealTypes, Meals, ConsumedProducts
 ```
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
