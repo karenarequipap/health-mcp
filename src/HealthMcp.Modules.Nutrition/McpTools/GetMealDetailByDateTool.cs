@@ -14,7 +14,14 @@ public static class GetMealDetailByDateTool
         [Description("Date (YYYY-MM-DD)")] string date,
         CancellationToken cancellationToken)
     {
-        var d = DateOnly.Parse(date);
+        if (!DateOnly.TryParse(date, out var d))
+        {
+            return new MealDetailResult
+            {
+                IsError = true,
+                ErrorMessage = $"Invalid date format: '{date}'. Expected format: YYYY-MM-DD"
+            };
+        }
 
         var meals = await db.Meals
             .Include(m => m.MealType)
@@ -37,10 +44,16 @@ public static class GetMealDetailByDateTool
             }).ToList()
         )).ToList();
 
-        return new MealDetailResult(mealDetails);
+        return new MealDetailResult { Meals = mealDetails };
     }
 }
 
-public record ProductConsumedDetail(string name, decimal quantityGrams, decimal calories);
-public record MealDetail(string mealType, List<ProductConsumedDetail> products);
-public record MealDetailResult(List<MealDetail> meals);
+public record ProductConsumedDetail(string Name, decimal QuantityGrams, decimal Calories);
+public record MealDetail(string MealType, List<ProductConsumedDetail> Products);
+
+public class MealDetailResult
+{
+    public List<MealDetail> Meals { get; set; } = [];
+    public bool IsError { get; set; }
+    public string? ErrorMessage { get; set; }
+}

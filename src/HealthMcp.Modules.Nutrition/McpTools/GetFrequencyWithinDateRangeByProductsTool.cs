@@ -15,8 +15,23 @@ public static class GetFrequencyWithinDateRangeByProductsTool
         [Description("End date (YYYY-MM-DD)")] string endDate,
         CancellationToken cancellationToken)
     {
-        var from = DateOnly.Parse(startDate);
-        var to = DateOnly.Parse(endDate);
+        if (!DateOnly.TryParse(startDate, out var from))
+        {
+            return new FrequencyResult
+            {
+                IsError = true,
+                ErrorMessage = $"Invalid start date format: '{startDate}'. Expected format: YYYY-MM-DD"
+            };
+        }
+
+        if (!DateOnly.TryParse(endDate, out var to))
+        {
+            return new FrequencyResult
+            {
+                IsError = true,
+                ErrorMessage = $"Invalid end date format: '{endDate}'. Expected format: YYYY-MM-DD"
+            };
+        }
 
         var consumed = await db.ConsumedProducts
             .Where(c => c.Meal.Date >= from && c.Meal.Date <= to)
@@ -26,12 +41,18 @@ public static class GetFrequencyWithinDateRangeByProductsTool
         var frequencies = consumed
             .GroupBy(name => name)
             .Select(g => new ProductFrequency(g.Key, g.Count()))
-            .OrderByDescending(f => f.count)
+            .OrderByDescending(f => f.Count)
             .ToList();
 
-        return new FrequencyResult(frequencies);
+        return new FrequencyResult { Products = frequencies };
     }
 }
 
-public record ProductFrequency(string name, int count);
-public record FrequencyResult(List<ProductFrequency> products);
+public record ProductFrequency(string Name, int Count);
+
+public class FrequencyResult
+{
+    public List<ProductFrequency> Products { get; set; } = [];
+    public bool IsError { get; set; }
+    public string? ErrorMessage { get; set; }
+}

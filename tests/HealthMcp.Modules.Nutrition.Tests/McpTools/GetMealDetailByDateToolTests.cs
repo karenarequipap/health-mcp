@@ -34,12 +34,14 @@ public class GetMealDetailByDateToolTests
         var result = await GetMealDetailByDateTool.GetMealDetailByDate(
             db, "2026-02-01", CancellationToken.None);
 
-        var m = Assert.Single(result.meals);
-        Assert.Equal("Breakfast", m.mealType);
-        var p = Assert.Single(m.products);
-        Assert.Equal("Eggs", p.name);
-        Assert.Equal(60, p.quantityGrams);
-        Assert.Equal(93.00m, p.calories); // 60 * 155 / 100
+        Assert.False(result.IsError);
+        Assert.Null(result.ErrorMessage);
+        var m = Assert.Single(result.Meals);
+        Assert.Equal("Breakfast", m.MealType);
+        var p = Assert.Single(m.Products);
+        Assert.Equal("Eggs", p.Name);
+        Assert.Equal(60, p.QuantityGrams);
+        Assert.Equal(93.00m, p.Calories); // 60 * 155 / 100
     }
 
     [Fact]
@@ -53,6 +55,55 @@ public class GetMealDetailByDateToolTests
         var result = await GetMealDetailByDateTool.GetMealDetailByDate(
             db, "2099-01-01", CancellationToken.None);
 
-        Assert.Empty(result.meals);
+        Assert.False(result.IsError);
+        Assert.Null(result.ErrorMessage);
+        Assert.Empty(result.Meals);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForInvalidDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetMealDetailByDateTool.GetMealDetailByDate(
+            db, "not-a-date", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid date format", result.ErrorMessage);
+        Assert.Contains("not-a-date", result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForOutOfRangeDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetMealDetailByDateTool.GetMealDetailByDate(
+            db, "2026-13-01", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid date format", result.ErrorMessage);
+        Assert.Contains("2026-13-01", result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForEmptyDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetMealDetailByDateTool.GetMealDetailByDate(
+            db, "", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid date format", result.ErrorMessage);
     }
 }

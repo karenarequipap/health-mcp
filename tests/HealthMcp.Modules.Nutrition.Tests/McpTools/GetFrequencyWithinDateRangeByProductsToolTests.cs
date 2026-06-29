@@ -39,10 +39,59 @@ public class GetFrequencyWithinDateRangeByProductsToolTests
         var result = await GetFrequencyWithinDateRangeByProductsTool.GetFrequencyWithinDateRangeByProducts(
             db, "2026-02-01", "2026-02-02", CancellationToken.None);
 
-        Assert.Equal(2, result.products.Count);
-        var eggsFreq = result.products.First(p => p.name == "Eggs");
-        Assert.Equal(2, eggsFreq.count);
-        var cheeseFreq = result.products.First(p => p.name == "Feta cheese");
-        Assert.Equal(1, cheeseFreq.count);
+        Assert.False(result.IsError);
+        Assert.Null(result.ErrorMessage);
+        Assert.Equal(2, result.Products.Count);
+        var eggsFreq = result.Products.First(p => p.Name == "Eggs");
+        Assert.Equal(2, eggsFreq.Count);
+        var cheeseFreq = result.Products.First(p => p.Name == "Feta cheese");
+        Assert.Equal(1, cheeseFreq.Count);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForInvalidStartDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetFrequencyWithinDateRangeByProductsTool.GetFrequencyWithinDateRangeByProducts(
+            db, "not-a-date", "2026-02-02", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid start date format", result.ErrorMessage);
+        Assert.Contains("not-a-date", result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForInvalidEndDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetFrequencyWithinDateRangeByProductsTool.GetFrequencyWithinDateRangeByProducts(
+            db, "2026-02-01", "2026-13-01", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid end date format", result.ErrorMessage);
+        Assert.Contains("2026-13-01", result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ReturnsErrorForEmptyStartDate()
+    {
+        var options = new DbContextOptionsBuilder<NutritionDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        await using var db = new NutritionDbContext(options);
+
+        var result = await GetFrequencyWithinDateRangeByProductsTool.GetFrequencyWithinDateRangeByProducts(
+            db, "", "2026-02-02", CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Contains("Invalid start date format", result.ErrorMessage);
     }
 }
