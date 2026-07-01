@@ -18,36 +18,29 @@ public static class GetDailyConsumptionByDateRangeTool
         var from = DateOnly.Parse(startDate);
         var to = DateOnly.Parse(endDate);
 
-        var consumed = await db.ConsumedProducts
+        var days = await db.ConsumedProducts
             .Where(c => c.Meal.Date >= from && c.Meal.Date <= to)
-            .Select(c => new
+            .GroupBy(c => c.Meal.Date)
+            .OrderBy(g => g.Key)
+            .Select(g => new
             {
-                c.Meal.Date,
-                c.QuantityGrams,
-                c.Product.Calories,
-                c.Product.Protein,
-                c.Product.Fats,
-                c.Product.Carbohydrates
+                Date = g.Key,
+                Calories = g.Sum(x => x.Product.Calories * x.QuantityGrams / 100m),
+                Protein = g.Sum(x => x.Product.Protein * x.QuantityGrams / 100m),
+                Fats = g.Sum(x => x.Product.Fats * x.QuantityGrams / 100m),
+                Carbs = g.Sum(x => x.Product.Carbohydrates * x.QuantityGrams / 100m)
             })
             .ToListAsync(cancellationToken);
 
-        var days = consumed
-            .GroupBy(c => c.Date)
-            .OrderBy(g => g.Key)
-            .Select(g =>
-            {
-                var factor = 1m / 100m;
-                return new DaySummary(
-                    g.Key.ToString("yyyy-MM-dd"),
-                    Math.Round(g.Sum(x => x.Calories * x.QuantityGrams * factor), 2),
-                    Math.Round(g.Sum(x => x.Protein * x.QuantityGrams * factor), 2),
-                    Math.Round(g.Sum(x => x.Fats * x.QuantityGrams * factor), 2),
-                    Math.Round(g.Sum(x => x.Carbohydrates * x.QuantityGrams * factor), 2)
-                );
-            })
-            .ToList();
-
-        return new DailyConsumptionResult(days);
+        return new DailyConsumptionResult(days
+            .Select(d => new DaySummary(
+                d.Date.ToString("yyyy-MM-dd"),
+                Math.Round(d.Calories, 2),
+                Math.Round(d.Protein, 2),
+                Math.Round(d.Fats, 2),
+                Math.Round(d.Carbs, 2)
+            ))
+            .ToList());
     }
 }
 

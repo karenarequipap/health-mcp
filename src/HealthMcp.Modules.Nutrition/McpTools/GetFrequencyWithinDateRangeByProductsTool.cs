@@ -33,6 +33,10 @@ public static class GetFrequencyWithinDateRangeByProductsTool
             };
         }
 
+        // Note: We intentionally fetch product names and group in memory because EF Core's
+        // InMemory provider (used in tests) does not support server-side GroupBy translation.
+        // With Npgsql (PostgreSQL), a server-side GROUP BY would be more efficient, but using
+        // client-side grouping keeps the code portable across providers for this simple case.
         var consumed = await db.ConsumedProducts
             .Where(c => c.Meal.Date >= from && c.Meal.Date <= to)
             .Select(c => c.Product.Name)
