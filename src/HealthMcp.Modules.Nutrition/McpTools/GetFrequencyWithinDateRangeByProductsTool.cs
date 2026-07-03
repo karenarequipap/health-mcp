@@ -33,22 +33,17 @@ public static class GetFrequencyWithinDateRangeByProductsTool
             };
         }
 
-        // Note: We intentionally fetch product names and group in memory because EF Core's
-        // InMemory provider (used in tests) does not support server-side GroupBy translation.
-        // With Npgsql (PostgreSQL), a server-side GROUP BY would be more efficient, but using
-        // client-side grouping keeps the code portable across providers for this simple case.
-        var consumed = await db.ConsumedProducts
+        var frequencies = await db.ConsumedProducts
             .Where(c => c.Meal.Date >= from && c.Meal.Date <= to)
-            .Select(c => c.Product.Name)
+            .GroupBy(c => c.Product.Name)
+            .Select(g => new { Name = g.Key, Count = g.Count() })
+            .OrderByDescending(f => f.Count)
             .ToListAsync(cancellationToken);
 
-        var frequencies = consumed
-            .GroupBy(name => name)
-            .Select(g => new ProductFrequency(g.Key, g.Count()))
-            .OrderByDescending(f => f.Count)
-            .ToList();
-
-        return new FrequencyResult { Products = frequencies };
+        return new FrequencyResult
+        {
+            Products = frequencies.Select(f => new ProductFrequency(f.Name, f.Count)).ToList()
+        };
     }
 }
 
