@@ -28,7 +28,7 @@ Compact reference for AI agents working in this repo.
 
 ## State of the Codebase
 
-- **Current state**: Solution scaffolding is complete (projects, references, packages, Docker, solution file). No implementation code written yet — remaining work includes domain entities (Task 3), EF configurations + DbContext (4), initial migration (5), CSV import service TDD (6), CSV import API endpoint (7), MCP tools TDD (8-10), MCP Server host (11), and integration tests (12). Full plan at `docs/superpowers/plans/2026-06-07-nutrition-module.md`.
+- **Current state**: Domain entities, EF configurations, DbContext, migration, CSV import service and endpoint, and all 6 MCP tools (Tasks 3-10) are complete. Remaining: MCP Server host (Task 11) and integration tests (Task 12). Full plan at `docs/superpowers/plans/2026-06-07-nutrition-module.md`.
 - Domain model: `Product` (nutritional info per 100g), `MealType` (Breakfast/Lunch/etc.), `Meal` (date + meal type), `ConsumedProduct` (product + quantity in grams).
 - All MCP tools use EF Core `NutritionDbContext` with PostgreSQL and are registered via `[McpServerToolType]` + `[McpServerTool]`.
 

@@ -1571,7 +1571,7 @@ git commit -m "feat: add get_daily_consumption and get_nutrient_consumption MCP 
 - Create: `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetMealDetailByDateToolTests.cs`
 - Create: `src/HealthMcp.Modules.Nutrition/McpTools/GetMealDetailByDateTool.cs`
 
-- [ ] **Step 1: Write failing test for get_frequency**
+- [x] **Step 1: Write failing test for get_frequency**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetFrequencyWithinDateRangeByProductsToolTests.cs`:
 
@@ -1626,13 +1626,13 @@ public class GetFrequencyWithinDateRangeByProductsToolTests
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetFrequencyWithinDateRangeByProductsToolTests"
 ```
 
-- [ ] **Step 3: Implement the tool**
+- [x] **Step 3: Implement the tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetFrequencyWithinDateRangeByProductsTool.cs`:
 
@@ -1672,13 +1672,13 @@ public record ProductFrequency(string name, int count);
 public record FrequencyResult(List<ProductFrequency> products);
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetFrequencyWithinDateRangeByProductsToolTests"
 ```
 
-- [ ] **Step 5: Write failing test for get_meal_detail**
+- [x] **Step 5: Write failing test for get_meal_detail**
 
 Write `tests/HealthMcp.Modules.Nutrition.Tests/McpTools/GetMealDetailByDateToolTests.cs`:
 
@@ -1743,13 +1743,13 @@ public class GetMealDetailByDateToolTests
 }
 ```
 
-- [ ] **Step 6: Run test to verify it fails**
+- [x] **Step 6: Run test to verify it fails**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetMealDetailByDateToolTests"
 ```
 
-- [ ] **Step 7: Implement the tool**
+- [x] **Step 7: Implement the tool**
 
 Write `src/HealthMcp.Modules.Nutrition/McpTools/GetMealDetailByDateTool.cs`:
 
@@ -1802,20 +1802,20 @@ public record MealDetail(string mealType, List<ProductConsumedDetail> products);
 public record MealDetailResult(List<MealDetail> meals);
 ```
 
-- [ ] **Step 8: Run tests to verify they pass**
+- [x] **Step 8: Run tests to verify they pass**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/ --filter "FullyQualifiedName~GetMealDetailByDateToolTests"
 ```
 
-- [ ] **Step 9: Run all tests**
+- [x] **Step 9: Run all tests**
 
 ```bash
 dotnet test tests/HealthMcp.Modules.Nutrition.Tests/
 # Expected: All tests pass
 ```
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add -A

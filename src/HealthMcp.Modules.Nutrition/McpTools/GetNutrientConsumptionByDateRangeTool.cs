@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq.Expressions;
 using HealthMcp.Modules.Nutrition.Entities;
 using HealthMcp.Modules.Nutrition.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -29,46 +30,67 @@ public class NutrientProductDetail
 [McpServerToolType]
 public static class GetNutrientConsumptionByDateRangeTool
 {
-    private static readonly Dictionary<string, Func<Product, decimal?>> NutrientMap = new()
+    private static readonly Dictionary<string, string> NutrientPropertyNames = new()
     {
-        ["calories"] = p => p.Calories,
-        ["protein"] = p => p.Protein,
-        ["fats"] = p => p.Fats,
-        ["carbohydrates"] = p => p.Carbohydrates,
-        ["saturated"] = p => p.Saturated,
-        ["monounsaturated"] = p => p.Monounsaturated,
-        ["polyunsaturated"] = p => p.Polyunsaturated,
-        ["omega3"] = p => p.Omega3,
-        ["omega6"] = p => p.Omega6,
-        ["sugars"] = p => p.Sugars,
-        ["cholesterol"] = p => p.Cholesterol,
-        ["fibre"] = p => p.Fibre,
-        ["caffeine"] = p => p.Caffeine,
-        ["folicacid"] = p => p.FolicAcid,
-        ["vitamina"] = p => p.VitaminA,
-        ["vitaminb1"] = p => p.VitaminB1,
-        ["vitaminb2"] = p => p.VitaminB2,
-        ["vitaminb5"] = p => p.VitaminB5,
-        ["vitaminb6"] = p => p.VitaminB6,
-        ["biotin"] = p => p.Biotin,
-        ["vitaminb12"] = p => p.VitaminB12,
-        ["vitaminc"] = p => p.VitaminC,
-        ["vitamind"] = p => p.VitaminD,
-        ["vitamine"] = p => p.VitaminE,
-        ["vitaminpp"] = p => p.VitaminPP,
-        ["vitamink"] = p => p.VitaminK,
-        ["zinc"] = p => p.Zinc,
-        ["phosphorous"] = p => p.Phosphorous,
-        ["iodine"] = p => p.Iodine,
-        ["magnesium"] = p => p.Magnesium,
-        ["copper"] = p => p.Copper,
-        ["potassium"] = p => p.Potassium,
-        ["selenium"] = p => p.Selenium,
-        ["sodium"] = p => p.Sodium,
-        ["calcium"] = p => p.Calcium,
-        ["iron"] = p => p.Iron,
-        ["salt"] = p => p.Salt,
+        ["calories"] = "Calories",
+        ["protein"] = "Protein",
+        ["fats"] = "Fats",
+        ["carbohydrates"] = "Carbohydrates",
+        ["saturated"] = "Saturated",
+        ["monounsaturated"] = "Monounsaturated",
+        ["polyunsaturated"] = "Polyunsaturated",
+        ["omega3"] = "Omega3",
+        ["omega6"] = "Omega6",
+        ["sugars"] = "Sugars",
+        ["cholesterol"] = "Cholesterol",
+        ["fibre"] = "Fibre",
+        ["caffeine"] = "Caffeine",
+        ["folicacid"] = "FolicAcid",
+        ["vitamina"] = "VitaminA",
+        ["vitaminb1"] = "VitaminB1",
+        ["vitaminb2"] = "VitaminB2",
+        ["vitaminb5"] = "VitaminB5",
+        ["vitaminb6"] = "VitaminB6",
+        ["biotin"] = "Biotin",
+        ["vitaminb12"] = "VitaminB12",
+        ["vitaminc"] = "VitaminC",
+        ["vitamind"] = "VitaminD",
+        ["vitamine"] = "VitaminE",
+        ["vitaminpp"] = "VitaminPP",
+        ["vitamink"] = "VitaminK",
+        ["zinc"] = "Zinc",
+        ["phosphorous"] = "Phosphorous",
+        ["iodine"] = "Iodine",
+        ["magnesium"] = "Magnesium",
+        ["copper"] = "Copper",
+        ["potassium"] = "Potassium",
+        ["selenium"] = "Selenium",
+        ["sodium"] = "Sodium",
+        ["calcium"] = "Calcium",
+        ["iron"] = "Iron",
+        ["salt"] = "Salt",
     };
+
+    /// <summary>
+    /// Builds a dynamic expression: consumedProduct => ((consumedProduct.Product.<propertyName> ?? 0) * consumedProduct.QuantityGrams) / 100m
+    /// Handles both nullable (decimal?) and non-nullable (decimal) property types.
+    /// </summary>
+    private static Expression<Func<ConsumedProduct, decimal>> BuildNutrientTotalExpression(string propertyName)
+    {
+        var param = Expression.Parameter(typeof(ConsumedProduct), "c");
+        var product = Expression.Property(param, "Product");
+        var property = Expression.Property(product, propertyName);
+
+        Expression nutrientValue = property.Type.IsValueType && Nullable.GetUnderlyingType(property.Type) is null
+            ? property
+            : Expression.Coalesce(property, Expression.Constant(0m));
+
+        var quantityGrams = Expression.Property(param, "QuantityGrams");
+        var multiply = Expression.Multiply(nutrientValue, quantityGrams);
+        var divide = Expression.Divide(multiply, Expression.Constant(100m));
+
+        return Expression.Lambda<Func<ConsumedProduct, decimal>>(divide, param);
+    }
 
     [McpServerTool, Description("Returns consumption of a specific nutrient within a date range. Mode can be 'aggregated' (total per day) or 'detailed' (grouped by product)")]
     public static async Task<NutrientResult> GetNutrientConsumptionByDateRange(
@@ -79,63 +101,72 @@ public static class GetNutrientConsumptionByDateRangeTool
         [Description("Output mode: 'aggregated' or 'detailed'")] string mode,
         CancellationToken cancellationToken)
     {
-        if (!NutrientMap.TryGetValue(nutrient.ToLowerInvariant(), out var selector))
+        if (!NutrientPropertyNames.TryGetValue(nutrient.ToLowerInvariant(), out var propertyName))
         {
             return new NutrientResult
             {
                 IsError = true,
-                ErrorMessage = $"Unknown nutrient '{nutrient}'. Valid options: {string.Join(", ", NutrientMap.Keys.Order())}"
+                ErrorMessage = $"Unknown nutrient '{nutrient}'. Valid options: {string.Join(", ", NutrientPropertyNames.Keys.Order())}"
             };
         }
 
         var from = DateOnly.Parse(startDate);
         var to = DateOnly.Parse(endDate);
 
-        var consumed = await db.ConsumedProducts
-            .Where(c => c.Meal.Date >= from && c.Meal.Date <= to)
-            .Select(c => new
-            {
-                c.Meal.Date,
-                c.Product.Name,
-                c.QuantityGrams,
-                Product = c.Product
-            })
-            .ToListAsync(cancellationToken);
+        var totalSelector = BuildNutrientTotalExpression(propertyName);
+
+        var query = db.ConsumedProducts
+            .Where(c => c.Meal.Date >= from && c.Meal.Date <= to);
 
         if (mode == "detailed")
         {
-            var days = consumed
-                .GroupBy(c => c.Date)
+            var raw = await query
+                .GroupBy(c => new { c.Meal.Date, c.Product.Name })
+                .OrderBy(g => g.Key.Date)
+                .ThenBy(g => g.Key.Name)
+                .Select(g => new
+                {
+                    g.Key.Date,
+                    g.Key.Name,
+                    Value = g.AsQueryable().Sum(totalSelector)
+                })
+                .ToListAsync(cancellationToken);
+
+            var days = raw
+                .GroupBy(r => r.Date)
                 .OrderBy(g => g.Key)
                 .Select(g => new NutrientDaySummary
                 {
                     Date = g.Key.ToString("yyyy-MM-dd"),
-                    Products = g
-                        .GroupBy(x => x.Name)
-                        .Select(x => new NutrientProductDetail
-                        {
-                            Name = x.Key,
-                            Value = Math.Round(x.Sum(p => (selector(p.Product) ?? 0) * p.QuantityGrams / 100m), 2)
-                        })
-                        .OrderBy(x => x.Name)
-                        .ToList(),
-                    Value = Math.Round(g.Sum(x => (selector(x.Product) ?? 0) * x.QuantityGrams / 100m), 2)
+                    Value = Math.Round(g.Sum(x => x.Value), 2),
+                    Products = g.Select(x => new NutrientProductDetail
+                    {
+                        Name = x.Name,
+                        Value = Math.Round(x.Value, 2)
+                    }).OrderBy(x => x.Name).ToList()
                 })
                 .ToList();
 
             return new NutrientResult { Days = days };
         }
 
-        var aggregated = consumed
-            .GroupBy(c => c.Date)
+        var aggregated = await query
+            .GroupBy(c => c.Meal.Date)
             .OrderBy(g => g.Key)
-            .Select(g => new NutrientDaySummary
+            .Select(g => new
             {
-                Date = g.Key.ToString("yyyy-MM-dd"),
-                Value = Math.Round(g.Sum(x => (selector(x.Product) ?? 0) * x.QuantityGrams / 100m), 2)
+                Date = g.Key,
+                Value = g.AsQueryable().Sum(totalSelector)
             })
-            .ToList();
+            .ToListAsync(cancellationToken);
 
-        return new NutrientResult { Days = aggregated };
+        return new NutrientResult
+        {
+            Days = aggregated.Select(d => new NutrientDaySummary
+            {
+                Date = d.Date.ToString("yyyy-MM-dd"),
+                Value = Math.Round(d.Value, 2)
+            }).ToList()
+        };
     }
 }
